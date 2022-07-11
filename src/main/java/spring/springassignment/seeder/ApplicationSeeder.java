@@ -1,10 +1,15 @@
 package spring.springassignment.seeder;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.logging.Logger;
+
 @Component
+@Slf4j
 public class ApplicationSeeder implements CommandLineRunner {
     @Autowired
     ProductSeeder productSeeder;
@@ -17,6 +22,7 @@ public class ApplicationSeeder implements CommandLineRunner {
 
     private boolean isCreated = false;
 
+
     @Override
     public void run(String... args) throws Exception {
         if (isCreated) {
@@ -24,6 +30,7 @@ public class ApplicationSeeder implements CommandLineRunner {
             productSeeder.ProductSeeder();
             accountSeeder.accountSeeder();
             orderSeeder.orderSeeder();
+            log.info("done");
         }
     }
 }

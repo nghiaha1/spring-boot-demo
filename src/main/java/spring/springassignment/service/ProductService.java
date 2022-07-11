@@ -8,9 +8,11 @@ import spring.springassignment.entity.Product;
 import spring.springassignment.entity.enums.ProductSimpleStatus;
 import spring.springassignment.repository.ProductRepsitory;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ProductService {
     @Autowired
     ProductRepsitory productRepsitory;
