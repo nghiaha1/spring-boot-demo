@@ -18,6 +18,11 @@ public class ProductService {
     ProductRepsitory productRepsitory;
 
     public Iterable<Product> findAll() {
+        Iterable<Product> products = productRepsitory.findAll();
+        return products;
+    }
+
+    public Iterable<Product> findAllWithPagnation() {
         Page<Product> products = productRepsitory.findAllByStatusEquals(ProductSimpleStatus.ACTIVE, PageRequest.of(0, 10));
         return products;
     }

@@ -8,4 +8,5 @@ import spring.springassignment.entity.enums.ProductSimpleStatus;
 
 public interface ProductRepsitory extends JpaRepository<Product, String> {
     Page<Product> findAllByStatusEquals(ProductSimpleStatus status, Pageable pageable);
+
 }
