@@ -21,7 +21,7 @@ import java.util.*;
 
 @Slf4j
 public class ApiAuthorizationFilter extends OncePerRequestFilter {
-    private static final String[] IGNORE_PATHS = {"/api/v1/login", "/api/v1/register", "/api/v1/products"};
+    private static final String[] IGNORE_PATHS = {"/api/v1/accounts/login", "/api/v1/accounts/register", "/api/v1/products**", "/api/v1/products/**", "/api/v1/orders"};
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

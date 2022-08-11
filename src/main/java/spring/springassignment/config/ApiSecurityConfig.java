@@ -15,6 +15,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
+//    @Value("${auth0.audience}")
+//    private String audience;
+//    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+//    private String issuer;
     @Autowired
     UserDetailsService userDetailsService;
     @Autowired
@@ -24,12 +28,11 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // tạo filter cho login, cấu hình theo link đăng nhập
         ApiAuthenticationFilter apiAuthenticationFilter = new ApiAuthenticationFilter(authenticationManagerBean());
-        apiAuthenticationFilter.setFilterProcessesUrl("/api/v1/login");
+        apiAuthenticationFilter.setFilterProcessesUrl("/api/v1/accounts/login");
         http.cors().and().csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/api/v1/account/products",
-                        "/api/v1/login",
-                        "/api/v1/register",
+                .antMatchers("/api/v1/products",
+                        "/api/v1/orders",
                         "/api/v1/account/login",
                         "/api/v1/account/register")
                 .permitAll();
@@ -37,9 +40,29 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/accounts/users").hasAnyAuthority("user");
         http.authorizeRequests()
                 .antMatchers( "/api/v1/accounts/admins").hasAnyAuthority("admin");
+
+        // auth0
+//        http.authorizeRequests()
+//                .antMatchers(HttpMethod.GET, "/api/menu/items/**").permitAll()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .oauth2ResourceServer()
+//                .jwt();
         http.addFilter(apiAuthenticationFilter);
         http.addFilterBefore(new ApiAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
+
+//    JwtDecoder jwtDecoder() {
+//        OAuth2TokenValidator<Jwt> wityAudience = new AudienceValidator(audience);
+//        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
+//        OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(wityAudience, withIssuer);
+//
+//        NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromIssuerLocation(issuer);
+//        jwtDecoder.setJwtValidator(validator);
+//        return jwtDecoder;
+//    }
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {

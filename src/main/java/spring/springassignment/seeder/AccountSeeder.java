@@ -25,8 +25,9 @@ public class AccountSeeder {
         for (int i = 0; i < NUMBER_OF_USER; i++) {
             accounts.add(Account.builder()
                             .id(UUID.randomUUID().toString())
+                            .fullName(faker.name().name())
                             .username(faker.name().username())
-                            .role(NumberUtil.getRandomNumber(1,2))
+                            .password(faker.letterify("abc"))
                     .build());
         }
         accountRepository.saveAll(accounts);

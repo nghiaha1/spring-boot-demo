@@ -14,7 +14,7 @@ public class SpringAssignmentApplication {
     }
 
     @Bean
-    public PasswordEncoder bCryptPasswordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

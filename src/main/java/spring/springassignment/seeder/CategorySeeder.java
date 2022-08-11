@@ -18,7 +18,7 @@ public class CategorySeeder {
     private static final int NUMBER_OF_CATEGORIES = 50;
     public static List<Category> categories;
     
-    public void CategorySeeder() {
+    public void categorySeeder() {
         Faker faker = new Faker();
         Category category = new Category();
         categories = new ArrayList<>();

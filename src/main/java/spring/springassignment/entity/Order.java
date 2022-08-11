@@ -30,6 +30,9 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
     public void CalculateTotalPrice() {
         this.totalPrice = new BigDecimal(0);
         if (this.orderDetails != null && this.orderDetails.size() > 0) {
@@ -40,4 +43,12 @@ public class Order extends BaseEntity {
             }
         }
     }
+//    public void addTotalPrice(OrderDetail orderDetail) {
+//        if (this.totalPrice == null) {
+//            this.totalPrice = new BigDecimal(0);
+//        }
+//        BigDecimal quantityInBigDecimal = new BigDecimal(orderDetail.getQuantity());
+//        this.totalPrice = this.totalPrice.add(
+//                orderDetail.getUnitPrice().multiply(quantityInBigDecimal));
+//    }
 }

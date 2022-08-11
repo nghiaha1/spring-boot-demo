@@ -2,6 +2,8 @@ package spring.springassignment.entity;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import spring.springassignment.entity.base.BaseEntity;
 import spring.springassignment.entity.enums.ProductSimpleStatus;
 
@@ -17,6 +19,8 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "products")
+@SQLDelete(sql = "UPDATE products SET status = 2 WHERE id = ?")
+@Where(clause = "status = 1")
 public class Product extends BaseEntity {
     @Id
 //    @GeneratedValue(generator = "uuid")
@@ -30,7 +34,7 @@ public class Product extends BaseEntity {
     private String thumbnails;
     private BigDecimal price;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "category_id")
     private Category categories;
 

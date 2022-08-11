@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import spring.springassignment.entity.base.BaseEntity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,8 +20,18 @@ public class Account extends BaseEntity {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
+    private String fullName;
     @Column(unique = true)
     private String username;
-    private String passwordHash;
-    private int role;
+    private String password;
+    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+//    @Column(columnDefinition = "varchar(255) default 'user'")
+    @JoinTable(
+            name = "accounts_roles",
+            joinColumns = @JoinColumn(
+                    name = "account_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles;
+    private int status;
 }

@@ -6,7 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import spring.springassignment.entity.Account;
+import spring.springassignment.entity.dto.AccountDTO;
+import spring.springassignment.entity.dto.RegisterDTO;
 import spring.springassignment.repository.AccountRepository;
+import spring.springassignment.service.AccountService;
 
 @RestController
 @RequestMapping(path = "api/v1/accounts")
@@ -16,22 +19,26 @@ public class AccountApi {
     PasswordEncoder passwordEncoder;
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    AccountService accountService;
 
     @RequestMapping(method = RequestMethod.POST, path = "login")
-    public ResponseEntity<?> login(@RequestBody Account account) {
+    public ResponseEntity<?> login(@RequestBody AccountDTO account) {
         Account exitingAccount = accountRepository.findAccountByUsername(account.getUsername());
         if (exitingAccount == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login Failed!");
         }
-        boolean result = passwordEncoder.matches(account.getPasswordHash(), exitingAccount.getPasswordHash());
+        boolean result = passwordEncoder.matches(account.getPassword(), exitingAccount.getPassword());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "register")
-    public Account register(@RequestBody Account account) {
-        account.setPasswordHash(passwordEncoder.encode(account.getPasswordHash()));
-        accountRepository.save(account);
-        return account;
+    public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
+        Account account = accountService.register(registerDTO);
+        if (account == null) {
+            return new ResponseEntity<>("server error!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET)

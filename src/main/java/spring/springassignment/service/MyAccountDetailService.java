@@ -31,17 +31,16 @@ public class MyAccountDetailService implements UserDetailsService {
             có thể tạo ra bằng quyền riêng mapping n-n với table accounts
          */
         ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        if (account.getRole() == 1) {
-            authorities.add(new SimpleGrantedAuthority("user")); //add new role in user
-        }else if (account.getRole() == 2) {
-            authorities.add(new SimpleGrantedAuthority("admin"));
+        if (account.getRoles().equals(2)) {
+            authorities.add(new SimpleGrantedAuthority("admin")); //add new role in user
         }else {
-            authorities.add(new SimpleGrantedAuthority("guest"));
+            authorities.add(new SimpleGrantedAuthority("user"));
         }
+
         /*
             tạo đối tượng user detail theo thông tin username, password, quyền đc lấy ở trên.
             trong đó password là password đã đc mã hóa
          */
-        return new User(account.getUsername(), account.getPasswordHash(), authorities);
+        return new User(account.getUsername(), account.getPassword(), authorities);
     }
 }

@@ -1,5 +1,6 @@
 package spring.springassignment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,11 +21,13 @@ public class OrderDetail {
     @ManyToOne
     @MapsId("orderId")
     @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
     private Order order;
 
     @ManyToOne
     @MapsId("productId")
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
     private Product product;
 
     private Integer quantity;

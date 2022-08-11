@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import spring.springassignment.entity.*;
 import spring.springassignment.entity.enums.OrderSimpleStatus;
 import spring.springassignment.repository.OrderRepository;
+import spring.springassignment.repository.UserRepository;
 import spring.springassignment.util.DateTimeHelper;
 import spring.springassignment.util.NumberUtil;
 
@@ -16,19 +17,20 @@ import java.util.*;
 @Component
 public class OrderSeeder {
     public static List<Order> orders;
-    private static final int NUMBER_OF_ORDER = 1000;
-    private static final int NUMBER_OF_DONE_ORDER = 700;
-    private static final int NUMBER_OF_CANCELED_ORDER = 100;
-    private static final int NUMBER_OF_PENDING_ORDER = 200;
     private static final int MIN_ORDER_DETAIL = 2;
     private static final int MAX_ORDER_DETAIL = 5;
     private static final int MIN_PRODUCT_QUANTITY = 1;
     private static final int MAX_PRODUCT_QUANTITY = 10;
+    Random random = new Random();
 
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    UserRepository userRepository;
 
     List<OrderSeederByTime> seeder;
+    List<User> users;
+
 
     public void configData() {
         seeder = new ArrayList<>();
@@ -70,6 +72,7 @@ public class OrderSeeder {
     public void orderSeeder() {
         configData();
         Faker faker = new Faker();
+        users = userRepository.findAll();
         orders = new ArrayList<>();
         for (OrderSeederByTime orderSeederByTime : seeder) {
             int numberOfOrder = orderSeederByTime.getOrderCount();
@@ -81,6 +84,8 @@ public class OrderSeeder {
                 Order order = new Order();
                 order.setId(UUID.randomUUID().toString());
                 order.setStatus(orderSeederByTime.getOrderStatus());
+                User user = users.get(random.nextInt(users.size()));
+                order.setUser(user);
                 LocalDateTime orderCreatedTime = calculateOrderCreatedTime(orderSeederByTime);
                 order.setCreatedAt(orderCreatedTime);
                 order.setUpdatedAt(orderCreatedTime);
@@ -123,9 +128,6 @@ public class OrderSeeder {
         LocalDateTime tempLocalDateTime = null;
         int tempMonth = 1;
         int tempYear = 2022;
-        int tempHour = 0;
-        int tempMinute = 0;
-        int tempSecond = 0;
         switch (orderSeederByTime.getSeedTypeByTime()) {
             case YEAR:
                 //theo năm thì random tháng và ngày
